@@ -39,6 +39,7 @@ This is **not** a dashboard over a database. This is a **live intelligence flow*
 | **Dashboard** | Real-time feed, wallet dashboard, analytics, search, filters, calendar |
 | **Mining Machine API** | REST + WebSocket API for the decoupled miner to pull opportunities, get wallet-specific tasks, and report back status |
 | **v2 Hardening** | On-chain wallet verification, dynamic scoring, cross-opportunity gas optimization, predictive discovery, per-machine abuse limits, fleet dashboard — see `docs/improvements-v2.md` |
+| **Self-Evolution** | Speculative LLM pipeline, self-correction engine, historical pattern engine, adversary model, source authority scoring, gas-optimized routing — see `docs/nabu-self-evolution.md` |
 
 ---
 
@@ -205,15 +206,15 @@ cd dashboard && npm install && npm run dev
 - [ ] Multi-wallet orchestration support in API
 - [ ] Public dashboard (read-only) for community
 
-### Phase5 — Hardening & Autonomy (Week 8+) [v2]
-- [ ] On-chain wallet watcher (Alchemy Notify / Blocknative / RPC logs)
-- [ ] Dynamic scoring weights from market regime detector
-- [ ] Cross-opportunity task orchestrator (`/wallets/:addr/plan`)
-- [ ] Predictive leads engine (anomaly detection on leading indicators)
-- [ ] Per-machine API rate limits + abuse detection
-- [ ] Mining machine fleet dashboard (`/machines`)
-- [ ] Scoring champion/challenger A/B with outcome feedback loop
-> See `docs/improvements-v2.md` for full v2 design.
+### Phase6 — Self-Aware Oracle (Week 9+)
+- [ ] Speculative analysis pipeline (parallel LLM, first-wins)
+- [ ] Self-correction engine (feedback loop, gradient descent on weights)
+- [ ] Historical pattern engine (outcome database, similar-opportunity lookup)
+- [ ] Adversary model (scam likelihood scoring)
+- [ ] Source authority scoring (credibility-weighted signals)
+- [ ] Gas-optimized task routing (cheapest path per task)
+- [ ] Continuous A/B testing of scoring models
+> See `docs/nabu-self-evolution.md` for full design.
 
 ---
 
