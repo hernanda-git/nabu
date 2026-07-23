@@ -1,0 +1,65 @@
+# Nabu .gitignore
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+env/
+
+# Go
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+*.test
+*.out
+/vendor/
+
+# Node
+node_modules/
+.next/
+out/
+dist/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Environment
+.env
+.env.local
+.env.production
+
+# Config with secrets (template is tracked)
+/config/*.yaml
+!/config/nabu.yaml.example
+
+# Database
+*.sqlite
+*.sqlite3
+
+# Telegram sessions
+/sessions/
+/sessions/
+
+# Docker
+docker-compose.override.yml
+
+# Logs
+*.log
+/logs/
+
+# Data
+/data/
+pgdata/
+redisdata/
+rabbitmqdata/
