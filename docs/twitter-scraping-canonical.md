@@ -276,9 +276,60 @@ content-type: application/json
 
 ## 8. Recommended Next Steps (Priority Order)
 
-1. **Get CloakBrowser Pro trial** — `cloakbrowser login` with GitHub sign-in for v150 binary
-2. **Retest X.com login** with v150 binary (should fix intermittent loading)
-3. **Capture GraphQL query IDs** from a logged-in session via DevTools
-4. **Write the Nabu Twitter scraper** as `runtime/scrapers/twitter_scraper.py`
-5. **Integrate with RabbitMQ** — publish RawEvent to `source.twitter` queue
-6. **Add Hermes cron job** — `nabu-source-watch-twitter` every 5 minutes
+1. **Use Patchright with `channel="chrome"`** — routes through user's installed Google Chrome (v149+). No binary download needed. Already tested working: X.com loads, SSR renders, email fill works.
+
+2. **Create dedicated browser profile** — `~/.nabu/x-profile/` for persistent X.com session (separate from user's main Chrome profile).
+
+3. **One-time login** via headed mode with humanize:
+   ```python
+   from patchright.sync_api import sync_playwright
+   with sync_playwright() as pw:
+       ctx = pw.chromium.launch_persistent_context(
+           "~/.nabu/x-profile",
+           channel="chrome",
+           headless=False,
+       )
+       page = ctx.pages[0] or ctx.new_page()
+       page.goto("https://x.com/login")
+       # User completes login manually, or DOM automation
+       # Session saved automatically in profile
+   ```
+
+4. **Subsequent runs** — headless, logged in automatically (cookies persist).
+
+5. **Implement Nabu Twitter scraper** as `runtime/scrapers/twitter_scraper.py` using Patchright + XCli selectors.
+
+6. **Add Hermes cron job** — `nabu-source-watch-twitter` every 5 minutes.
+
+---
+
+## 9. Reference Codebases
+
+| Project | Stars | Key Files | What We Learned |
+|---------|-------|-----------|-----------------|
+| **XCli** (vermarjun/XCli) | 0⭐ | `core/auth.py`, `core/browser.py`, `scraping/selectors.py`, `scraping/parsing.py`, `scraping/extractor.py` | Complete X.com login + DOM scraping implementation. Uses Patchright + channel="chrome". Reference for Nabu scraper. |
+| **tweetly** (beydemirfurkan/tweetly) | 6⭐ | Full-stack (NestJS + Next.js) | MCP-based X automation platform. Too heavy for Nabu's needs. |
+| **patchright-python** (Kaliiiiiiiiii-Vinyzu) | 1,436⭐ | Core library | Stealth Playwright fork. Drop-in replacement. Used by XCli + tweetly. |
+| **persona-studio** (TechQaiser/persona-studio) | 15⭐ | Self-hosted anti-detect browser manager | Supports camoufox, cloakbrowser, AND patchright. Updated today. |
+
+---
+
+## Appendix A: Environment Summary
+
+```
+OS:         Windows 10
+Git Bash:   MSYS2 MinGW64
+Python:     3.11.15 (Hermes agent venv)
+Network:    Slow binary downloads (~200MB files time out)
+Edge cases: python → MS Store stub (use venv full path)
+
+INSTALLED:
+  cloakbrowser 0.5.1   + binary v146 (cached, ⚠️ unstable on X.com)
+  patchright    1.61.2  + channel="chrome" (uses installed Chrome v149+, ✅ works)
+  camoufox      0.5.4   + binary NOT fetched (download timed out)
+  playwright    1.60.0  + bundled Chromium 1223 (standard, not stealth)
+
+AVAILABLE:
+  Chrome:  C:\Program Files\Google\Chrome\Application\chrome.exe
+  Brave:   C:\Program Files\BraveSoftware\Brave-Browser\Application\brave.exe
+```

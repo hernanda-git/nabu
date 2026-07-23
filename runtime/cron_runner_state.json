@@ -1,5 +1,5 @@
 {
-  "cycle": 24,
+  "cycle": 12,
   "health_status": "healthy",
   "correction_needed": false,
   "last_cycle_results": {
@@ -7,38 +7,38 @@
       "job": "nabu-source-watch",
       "status": "completed",
       "duration_seconds": 0.0,
-      "timestamp": "2026-07-23T05:06:06.310510+00:00"
+      "timestamp": "2026-07-23T06:06:25.882272+00:00"
     },
     "nabu-deep-analysis": {
       "job": "nabu-deep-analysis",
       "status": "completed",
       "duration_seconds": 0.0,
-      "timestamp": "2026-07-23T05:06:06.810896+00:00"
+      "timestamp": "2026-07-23T06:06:26.395461+00:00"
     },
     "nabu-self-correction": {
       "job": "nabu-self-correction",
       "status": "completed",
       "duration_seconds": 0.0,
-      "timestamp": "2026-07-23T05:06:07.321536+00:00"
+      "timestamp": "2026-07-23T06:06:26.904078+00:00"
     },
     "nabu-market-regime": {
       "job": "nabu-market-regime",
       "status": "completed",
       "duration_seconds": 0.0,
-      "timestamp": "2026-07-23T05:06:07.821574+00:00"
+      "timestamp": "2026-07-23T06:06:27.419378+00:00"
     },
     "nabu-historical-patterns": {
       "job": "nabu-historical-patterns",
       "status": "completed",
       "duration_seconds": 0.0,
-      "timestamp": "2026-07-23T05:06:08.336496+00:00"
+      "timestamp": "2026-07-23T06:06:27.933306+00:00"
     },
     "nabu-health-check": {
       "job": "nabu-health-check",
       "status": "completed",
       "duration_seconds": 0.0,
-      "timestamp": "2026-07-23T05:06:08.847306+00:00"
+      "timestamp": "2026-07-23T06:06:28.445037+00:00"
     }
   },
-  "timestamp": "2026-07-23T05:06:09.361879+00:00"
+  "timestamp": "2026-07-23T06:06:28.960169+00:00"
 }
