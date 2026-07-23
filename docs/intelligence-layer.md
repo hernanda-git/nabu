@@ -395,6 +395,71 @@ class WalletStateTracker:
 
 ---
 
+## 5b. On-Chain Wallet Monitoring (Gap #1 — see docs/improvements-v2.md §2)
+
+**Problem with v1:** wallet state is *passive* — the mining machine reports completion and Nabu trusts it. No ground truth if a machine lies or crashes mid-task.
+
+**Fix:** add a **Wallet Watcher** that independently observes on-chain activity and reconciles against reported state.
+
+```python
+class WalletReconciliation:
+    async def on_chain_event(self, wallet, chain, event_type, tx_hash, block):
+        task = await db.match_task(wallet, chain, event_type, tx_hash)
+        if not task:
+            await db.record_unattributed_activity(wallet, chain, event_type, tx_hash)
+            return
+        reported = await db.get_reported_status(wallet, task.id)
+        if reported and reported.tx_hash != tx_hash:
+            await self.flag_conflict(wallet, task.id, reported.tx_hash, tx_hash)
+            return
+        await db.mark_task_verified(wallet, task.id, tx_hash, block)
+
+    async def flag_conflict(self, wallet, task_id, reported_tx, observed_tx):
+        await db.insert_event(Event(
+            type="wallet.task_conflict", wallet_address=wallet,
+            data={"task_id": task_id, "reported_tx": reported_tx, "observed_tx": observed_tx}))
+        await alerting.send("⚠️ Task conflict",
+            f"Wallet {wallet} task {task_id}: reported {reported_tx} but chain shows {observed_tx}")
+```
+
+**Providers:** Alchemy Notify (webhook on address activity), Blocknative (mempool→confirmed), custom RPC `eth_getLogs` filtered by address+topic, The Graph subgraphs per protocol.
+
+**New events:** `wallet.activity_detected`, `wallet.task_verified`, `wallet.task_conflict`, `wallet.unattributed`.
+
+---
+
+## 5c. Dynamic Scoring Weights (Gap #2 — see docs/improvements-v2.md §3)
+
+Fixed weights ignore market regime. A **Market Regime Detector** adjusts them hourly from on-chain macro signals.
+
+| Regime | Value | Conf | Urgency | Diff-inv | Reput | Comm |
+|---|---|---|---|---|---|---|
+| Bull | 0.38 | 0.18 | 0.15 | 0.07 | 0.12 | 0.10 |
+| Neutral (default) | 0.30 | 0.20 | 0.15 | 0.10 | 0.15 | 0.10 |
+| Bear | 0.22 | 0.18 | 0.12 | 0.08 | 0.28 | 0.12 |
+| High-scam | 0.20 | 0.15 | 0.10 | 0.07 | 0.38 | 0.10 |
+
+```python
+class MarketRegimeDetector:
+    async def current_regime(self) -> dict:
+        cache = await redis.get("market:regime")
+        if cache: return json.loads(cache)
+        signals = await self.gather_signals()
+        weights = self.WEIGHT_MATRIX[self.classify(signals)]
+        await redis.set("market:regime", json.dumps(weights), ex=3600)
+        return weights
+
+    def classify(self, s) -> str:
+        if s.scam_rate > 0.25: return "high_scam"
+        if s.market_cap_delta_30d > 0.20: return "bull"
+        if s.market_cap_delta_30d < -0.15: return "bear"
+        return "neutral"
+```
+
+The scoring engine reads weights from `MarketRegimeDetector` instead of constants.
+
+---
+
 ## 6. Predictive Analytics (Phase 4)
 
 **Goal**: Predict airdrop value before official announcements.

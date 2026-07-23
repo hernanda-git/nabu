@@ -452,6 +452,57 @@ for event in client.stream_events():
 | `webhook` | 120 | 30 |
 | `admin` | 60 | 20 |
 
+> **v2 hardening (see docs/improvements-v2.md §6):** per-`machine_id` quotas replace
+> global mining limits, plus abuse detection (report floods, reused tx hashes,
+> impossible completion latency) and IP allowlisting on registered egress CIDRs.
+
+### 3.6 Execution Plan (Cross-Opportunity Optimization)
+
+#### `GET /wallets/:address/plan`
+
+Returns an **optimized execution plan** instead of a flat task list. Tasks shared
+across opportunities are de-duplicated so gas is paid once.
+
+**Response:**
+```json
+{
+  "data": {
+    "wallet": "0x1234...abcd",
+    "naive_gas_usd": 180.00,
+    "optimized_gas_usd": 132.50,
+    "savings_pct": 26.4,
+    "steps": [
+      {"action": "bridge:arbitrum:0.5ETH", "satisfies": ["opp_a", "opp_b"], "reuse_count": 2, "gas_usd": 15},
+      {"action": "deploy:arbitrum:contract", "satisfies": ["opp_a", "opp_c", "opp_d"], "reuse_count": 3, "gas_usd": 10},
+      {"action": "swap:arbitrum:HSC", "satisfies": ["opp_a"], "reuse_count": 1, "gas_usd": 5}
+    ]
+  }
+}
+```
+
+### 3.7 Mining Machines (Fleet Management)
+
+#### `GET /machines`
+
+```json
+{
+  "data": [
+    {"id": "mm_001", "name": "Rig-Alpha", "status": "online", "current_task": "bridge:0.5ETH→HyperScale",
+     "total_gas_usd": 142.30, "success_rate": 94.2, "last_heartbeat": "2026-07-23T10:00:03Z"},
+    {"id": "mm_004", "name": "Rig-Delta", "status": "error", "current_task": null,
+     "total_gas_usd": 12.10, "success_rate": 40.0, "last_heartbeat": "2026-07-23T09:12:00Z"}
+  ]
+}
+```
+
+#### `POST /machines`
+
+Register a new machine with expected egress CIDR(s) for IP allowlisting.
+
+```json
+{"name": "Rig-Echo", "egress_cidr": ["203.0.113.0/24"], "tier": "mining"}
+```
+
 **Response headers:**
 ```
 X-RateLimit-Limit: 600

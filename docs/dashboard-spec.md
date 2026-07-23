@@ -32,6 +32,8 @@
 /calendar                  → Timeline view of upcoming claims
 /settings                  → API keys, webhooks, preferences
 /search                    → Global search
+/machines                  → Mining machine fleet (status, assignments, abuse) [v2]
+/watchlist                 → Predictive leads from anomaly detection [v2]
 ```
 
 ---

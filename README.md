@@ -38,6 +38,7 @@ This is **not** a dashboard over a database. This is a **live intelligence flow*
 | **Wallet State Tracking** | Knows what each wallet has done, what it still needs, and re-scopes tasks per wallet |
 | **Dashboard** | Real-time feed, wallet dashboard, analytics, search, filters, calendar |
 | **Mining Machine API** | REST + WebSocket API for the decoupled miner to pull opportunities, get wallet-specific tasks, and report back status |
+| **v2 Hardening** | On-chain wallet verification, dynamic scoring, cross-opportunity gas optimization, predictive discovery, per-machine abuse limits, fleet dashboard — see `docs/improvements-v2.md` |
 
 ---
 
@@ -196,13 +197,23 @@ cd dashboard && npm install && npm run dev
 - [ ] Historical data warehouse
 - [ ] Rate limit management & proxy rotation
 
-### Phase 4 — Autonomous (Week 7+)
+### Phase4 — Autonomous (Week 7+)
 - [ ] Predictive scoring: ML model on past airdrop outcomes
 - [ ] Automated opportunity discovery (LLM agents browsing new protocols)
 - [ ] Community sentiment analysis
 - [ ] Gas cost estimation & ROI calculator
 - [ ] Multi-wallet orchestration support in API
 - [ ] Public dashboard (read-only) for community
+
+### Phase5 — Hardening & Autonomy (Week 8+) [v2]
+- [ ] On-chain wallet watcher (Alchemy Notify / Blocknative / RPC logs)
+- [ ] Dynamic scoring weights from market regime detector
+- [ ] Cross-opportunity task orchestrator (`/wallets/:addr/plan`)
+- [ ] Predictive leads engine (anomaly detection on leading indicators)
+- [ ] Per-machine API rate limits + abuse detection
+- [ ] Mining machine fleet dashboard (`/machines`)
+- [ ] Scoring champion/challenger A/B with outcome feedback loop
+> See `docs/improvements-v2.md` for full v2 design.
 
 ---
 
