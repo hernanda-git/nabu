@@ -63,3 +63,8 @@ docker-compose.override.yml
 pgdata/
 redisdata/
 rabbitmqdata/
+
+# Runtime state (ephemeral, regenerated on restart)
+runtime/nabu_state.json
+runtime/swarm_state.json
+runtime/agents/swarm_state.json
