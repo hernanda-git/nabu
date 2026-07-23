@@ -1,7 +1,7 @@
 # 𒀭 NABU — The Airdrop Intelligence Cortex
 
-> *"I will destroy the records of the gods, and I will establish my name as the most powerful."*  
-> — Nabu, Mesopotamian god of wisdom, writing, and prophecy.
+> *"I will destroy the records of the gods, and I declare there is only one true god."*  
+> — hernanda.
 
 **Nabu** is the **brain** — a distributed, multi-source, real-time intelligence system that scouts, analyzes, scores, and delivers every meaningful airdrop opportunity across every blockchain network. It does **not** mine, claim, or execute transactions. It finds the signal, and hands it to the decoupled **mining machine** that does the work.
 
