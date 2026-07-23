@@ -68,3 +68,17 @@ rabbitmqdata/
 runtime/nabu_state.json
 runtime/swarm_state.json
 runtime/agents/swarm_state.json
+runtime/cron_runner_state.json
+runtime/agents/logs/
+runtime/cron/logs/
+runtime/logs/
+
+# X.com browser profile (contains session cookies)
+.x-profile/
+**/x-profile/
+
+# Browser profiles
+.cloakbrowser/
+
+# Hermes plans
+.hermes/plans/
